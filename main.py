@@ -12,8 +12,7 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 TOKEN: str = os.getenv("TOKEN")
 ID: int = os.getenv("ID") # server id
-CHAN = 1292291459239776337 # admin only chan
-
+CHAN: int = int(os.getenv("CHAN"))
 
 class Client(commands.Bot):
     async def on_ready(self):
@@ -34,7 +33,8 @@ intents.message_content = True
 client = Client(command_prefix="!", intents=intents)
 
 # discord server id
-GUILD_ID = discord.Object(id=ID)
+
+GUILD_ID = discord.Object(id = ID)
 
 database = sqlite3.connect('List.db')
 cursor = database.cursor()
@@ -158,9 +158,6 @@ async def clockIn(interaction: discord.Interaction):
 async def button(interaction: discord.Interaction):
     if not checkClockedIn(interaction.user.name):
         await interaction.response.send_message(f"You are not clocked in {interaction.user.name}")
-        return
-    if cursor.execute(f"SELECT App FROM team WHERE Name = ('{interaction.user.name}') ")== "FALSE":
-        await interaction.response.send_message(f"You already requested to clock out{interaction.user.name}")
         return
         
     Channel = client.get_channel(CHAN)
